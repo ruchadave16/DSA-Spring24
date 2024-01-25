@@ -1,3 +1,5 @@
+package org.assignment1
+
 /*
  * Helper functions for Huffman Encoding
  */

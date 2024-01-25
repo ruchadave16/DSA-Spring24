@@ -1,3 +1,5 @@
+package org.assignment1
+
 /**
  * Library containing necessary classes and functions to create a MinHeap
  */
@@ -39,7 +41,7 @@ class MinHeap (var size: Int = 0, var heap: MutableList<Node> = mutableListOf())
      * that is to be returned
      * @return: A pointer to the node found at the inputted index in the min heap
      */
-    fun get(index: Int) : Node {
+    operator fun get(index: Int) : Node {
         return heap[index]
     }
 
@@ -54,7 +56,7 @@ class MinHeap (var size: Int = 0, var heap: MutableList<Node> = mutableListOf())
      * @param index2: An int representing the second index of the node to be
      * swapped
      */
-    fun swap(index1: Int, index2: Int) {
+     fun swap(index1: Int, index2: Int) {
         val temp: Node = heap[index1]
         heap[index1] = heap[index2]
         heap[index2] = temp
@@ -101,7 +103,7 @@ class MinHeap (var size: Int = 0, var heap: MutableList<Node> = mutableListOf())
      * Print min heap in a list format
      */
     fun printSimpleHeap() {
-        for (i in 0..size - 1) {
+        for (i in 0..<size) {
             println("${heap[i].symbol.toChar()} freq: ${heap[i].freq}")
         }
     }

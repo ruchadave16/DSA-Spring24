@@ -1,3 +1,5 @@
+package org.assignment1
+
 fun main() {
     val map = mapFrequency("aabbbbcccccdddd")
     var heap: MinHeap = MinHeap()
