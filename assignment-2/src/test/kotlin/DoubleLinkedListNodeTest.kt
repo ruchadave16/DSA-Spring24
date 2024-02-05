@@ -1,4 +1,4 @@
-package org.assignment2
+package com.dsa.assignment2
 
 import org.junit.jupiter.api.Test
 
