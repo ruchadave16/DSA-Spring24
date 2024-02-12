@@ -1,28 +1,18 @@
 package org.dsa.assignment3
 
 /**
- * This ``Graph`` that represents a directed graph
- * @param VertexType the representation of a vertex in the graph
+ * An interface that represents a directed graph
+ *
+ * @param VertexType: the representation of a vertex in the graph
  */
+
 interface Graph<VertexType> {
-    /**
-     * @return the vertices in the graph
-     */
     fun getVertices(): Set<VertexType>
 
-    /**
-     * Add an
-     */
     fun addEdge(from: VertexType, to: VertexType, cost: Double)
 
-    /**
-     *
-     */
     fun getEdges(from: VertexType): Map<VertexType, Double>
 
-    /**
-     * Remove all edges and vertices from the graph
-     */
     fun clear()
 }
 
