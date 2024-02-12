@@ -1,8 +1,7 @@
-import org.dsa.assignment3.MinHeap
+package org.dsa.assignment3
+
 import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
-
 class MinHeapTest {
 
     @Test

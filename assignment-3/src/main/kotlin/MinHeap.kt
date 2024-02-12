@@ -1,168 +1,181 @@
 package org.dsa.assignment3
 
 /**
- * Representation of a min heap
+ * Data class representing a node from the MinHeap
+ *
+ * @param data: Type T representing the data the node represents
+ * @param priority: A Double representing the priority of the data
+ */
+data class MinHeapNode<T> (
+    var data: T,
+    var priority: Double = 0.0
+)
+
+
+/**
+ * A class implementing a min heap
+ *
  * @param T the type of the heap elements
- * @property vertices these hold the tree structure using the scheme in
- *     https://en.wikipedia.org/wiki/Heap_(data_structure)
- * @property indexMap this is used for quick lookups of existing vertices
+ * @property size: an Int representing the total elements in the heap
+ * @property vertices: A list holding the heap structure as nodes of the element T and its priority
+ * @property indexMap: A lookup map to find existing vertices
  */
 class MinHeap<T> {
-    private var vertices: MutableList<Pair<T, Double>> = mutableListOf()
+    private var size: Int = 0
+    private var vertices: MutableList<MinHeapNode<T>> = mutableListOf()
     private var indexMap: MutableMap<T, Int> = mutableMapOf()
 
     /**
-     * @return true if the heap is empty and false otherwise
+     * Check if the heap is empty
+     *
+     * @return True if the heap is empty and false otherwise
      */
     fun isEmpty(): Boolean {
-        return vertices.isEmpty()
+        return (size == 0)
     }
 
     /**
-     * Insert [data] into the heap with value [heapNumber]
-     * @return true if [data] is added and false if [data] was already there
+     * Get the index of an element in the heap
+     *
+     * @param vertex: A type T element to get the index of in the map
+     *
+     * @return An Int representing the index of the element in the map if it exists and null otherwise
      */
-    fun insert(data: T, heapNumber: Double):Boolean {
-        if (contains(data)) {
+    fun get(vertex: T): Int? {
+        return indexMap[vertex]
+    }
+
+    /**
+     * Swap two vertexes at the indexes provided in the heap structure
+     *
+     *  @param index1: An int representing the first index of the node to be swapped
+     *  @param index2: An int representing the second index of the node to be swapped
+     */
+    private fun swap(index1: Int, index2: Int) {
+        val temp: MinHeapNode<T> = vertices[index1]
+        vertices[index1] = vertices[index2]
+        vertices[index2] = temp
+
+        // Set indexes in map right
+        indexMap[vertices[index1].data] = index1
+        indexMap[vertices[index2].data] = index2
+    }
+
+    /**
+     * Insert the inputted data into the correct position in the min heap if it isn't there already
+     *
+     * This first appends the vertex to the end of the heap and then compared the
+     * frequency of the new vertex to the parent vertex (at index (i - 1) / 2). This
+     * is because the min heap is stored layer by layer, listing the nodes of the
+     * tree from left to right. If the new node is at a lower frequency than the
+     * parent, then they are swapped.
+     *
+     * @param data: Data of type T to be added to the heap
+     * @param heapNumber: A Double representing the priority of the data to be added to the minheap
+     *
+     * @return True if the data was inserted and False if it was already in the heap
+     */
+    fun insert(data: T, heapNumber: Double): Boolean {
+        if (indexMap.contains(data)) {
             return false
         }
-        vertices.add(Pair<T, Double>(data, heapNumber))
-        indexMap[data] = vertices.size - 1
-        percolateUp(vertices.size - 1)
+
+        vertices.addLast(MinHeapNode(data, heapNumber))
+        size += 1
+
+        // If first value, then set to index 0
+        if (size == 1) {
+            indexMap[data] = 0
+        }
+
+        var i: Int = size - 1
+        while (i >= 1) {
+            val parent: Int = (i - 1) / 2
+            if (vertices[parent].priority > vertices[i].priority) {
+                swap(parent, i)
+            }
+            i = parent
+        }
         return true
     }
 
     /**
-     * @return the minimum value in the heap (or null if heap is empty)
+     * Find the vertex with the minimum value in the heap (top value of heap) and remove it
+     *
+     * @return The data T associated with the vertex with the lowest priority and null if the heap is empty
      */
     fun getMin(): T? {
-        when (vertices.size) {
-            0 -> {
-                return null
-            }
-            1 -> {
-                val tmp = vertices[0].first
-                vertices = mutableListOf()
-                return tmp
-            }
-            else -> {
-                val tmp = vertices[0].first
-                swap(0, vertices.size - 1)
-                vertices.removeLast()
-                indexMap.remove(tmp)
-                bubbleDown(0)
-                return tmp
-            }
+        if (size == 0) {
+            return null
+        }
+        if (size == 1) {
+            size = 0
+            vertices = mutableListOf()
+            indexMap = mutableMapOf()
+            return vertices[0].data
+        }
+        else {
+            val temp: MinHeapNode<T> = vertices[0]
+            swap(0, size-1)
+            vertices.removeLast()
+            indexMap.remove(temp.data)
+            bubbleDown(0, vertices[0].priority)
+            return temp.data
         }
     }
 
     /**
-     * Change the number of an element
-     * @param vertex the element to change
-     * @param newNumber the new number for the element
+     * Change the priority of a value
+     *
+     * @param vertex: An element to change the priority of
+     * @param newNumber: A Double representing the new priority of the element
      */
     fun adjustHeapNumber(vertex: T, newNumber: Double) {
-        getIndex(of=vertex)?.also{ index ->
-            vertices[index] = Pair(vertices[index].first, newNumber)
-            // do both operations to avoid explicitly testing which way to go
-            percolateUp(startIndex=index)
-            bubbleDown(startIndex=index)
+        val vertexIdx: Int = get(vertex)!!
+        val currPriority: Double = vertices[vertexIdx].priority
+        vertices[vertexIdx].priority = newNumber
+
+        // If new priority is larger than current, then sort downwards
+        if (currPriority < newNumber) {
+            bubbleDown(vertexIdx, newNumber)
+        }
+
+        // Otherwise, continue checking up like in add
+        if (currPriority > newNumber) {
+            var i: Int = vertexIdx
+            while (i >= 1) {
+                val parent: Int = (i - 1) / 2
+                if (vertices[parent].priority > vertices[i].priority) {
+                    swap(parent, i)
+                }
+                i = parent
+            }
         }
     }
 
     /**
-     * @return true if the element is in the heap, false otherwise
+     * Move a higher priority vertex down the min heap
+     *
+     * @param vertexIdx: An int representing the index of the vertex to move down the min heap
+     * @param priority: A Double representing the priority of the vertex to move through the heap
      */
-    fun contains(vertex: T): Boolean {
-        return getIndex(of=vertex) != null
-    }
+    private fun bubbleDown(vertexIdx: Int, priority: Double) {
+        val child1Idx: Int = (vertexIdx * 2) + 1
+        val child2Idx: Int = (vertexIdx * 2) + 2
+        val child1Priority: Double = if (child1Idx >= size) Double.POSITIVE_INFINITY else vertices[child1Idx].priority
+        val child2Priority: Double = if (child2Idx >= size) Double.POSITIVE_INFINITY else vertices[child2Idx].priority
 
-    /**
-     * @return the index in the list where the element is stored (or null if
-     *     not there)
-     */
-    private fun getIndex(of: T): Int? {
-        return indexMap[of]
-    }
-
-    /**
-     * Bubble down from [startIndex] if needed
-     * @param startIndex the index in the tree to start the bubbling
-     */
-    private fun bubbleDown(startIndex: Int) {
-        val startNumber = vertices[startIndex].second
-        val leftIndex = getLeftIndex(of=startIndex)
-        val rightIndex = getRightIndex(of=startIndex)
-        val leftNumber = if (leftIndex >= vertices.size) Double.POSITIVE_INFINITY else vertices[leftIndex].second
-        val rightNumber = if (rightIndex >= vertices.size) Double.POSITIVE_INFINITY else vertices[rightIndex].second
-        if (startNumber < leftNumber && startNumber < rightNumber) {
+        // Check both children for the one with the priority that this falls above
+        if ((child1Priority < priority) && (child2Priority < priority)) {
             return
-        } else if (leftNumber < rightNumber) {
-            // swap with left since it is smallest
-            swap(leftIndex, startIndex)
-            bubbleDown(leftIndex)
+        } else if (child1Priority < child2Priority) {
+            swap(child1Idx, vertexIdx)
+            bubbleDown(child1Idx, priority)
             return
         } else {
-            // swap with right since it is smallest
-            swap(rightIndex, startIndex)
-            bubbleDown(rightIndex)
+            swap(child2Idx, vertexIdx)
+            bubbleDown(child2Idx, priority)
             return
         }
-    }
-
-    /**
-     * Swap [index1] and [index2] in the tree
-     * @param index1 the first element to swap
-     * @param index2 the second element to swap
-     */
-    private fun swap(index1: Int, index2: Int) {
-        // update our index map so we still can find thigns
-        indexMap[vertices[index1].first] = index2
-        indexMap[vertices[index2].first] = index1
-        val tmp = vertices[index1]
-        vertices[index1] = vertices[index2]
-        vertices[index2] = tmp
-    }
-
-    /**
-     * Percolate up from [startIndex] if needed
-     * @param startIndex the index in the tree to start the percolation
-     */
-    private fun percolateUp(startIndex: Int) {
-        val parentIndex = getParentIndex(of = startIndex)
-        if (parentIndex < 0) {
-            // we must be at the root
-            return
-        } else if (vertices[startIndex].second < vertices[parentIndex].second) {
-            swap(parentIndex, startIndex)
-            percolateUp(parentIndex)
-        }
-    }
-
-    /**
-     * Get the parent index in the list
-     * @param of the index to start from
-     * @return the index where the parent is stored (if applicable)
-     */
-    private fun getParentIndex(of: Int):Int {
-        return (of - 1) / 2
-    }
-
-    /**
-     * Get the left index in the list
-     * @param of the index to start from
-     * @return the index where the left child is stored (if applicable)
-     */
-    private fun getLeftIndex(of: Int):Int {
-        return of * 2 + 1
-    }
-
-    /**
-     * Get the right index in the list
-     * @param of the index to start from
-     * @return the index where the right child is stored (if applicable)
-     */
-    private fun getRightIndex(of: Int):Int {
-        return of * 2 + 2
     }
 }
