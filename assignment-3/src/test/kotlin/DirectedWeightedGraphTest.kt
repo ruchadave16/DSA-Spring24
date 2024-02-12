@@ -79,4 +79,22 @@ class DirectedWeightedGraphTest {
         assertTrue(graph.getVertices() == setOf<String>())
         assertTrue(graph.getEdges("Hello") == mapOf<String, Double>())
     }
+
+    @Test
+    fun dijkstra() {
+        // Use example from class to test dijkstras
+        val graph : DirectedWeightedGraph<String> = DirectedWeightedGraph()
+        graph.addEdge("start", "a", 2.0)
+        graph.addEdge("start", "b", 1.0)
+        graph.addEdge("start", "c", 2.0)
+        graph.addEdge("a", "e", 1.0)
+        graph.addEdge("b", "d", 3.0)
+        graph.addEdge("c", "d", 1.0)
+        graph.addEdge("e", "h", 1.0)
+        graph.addEdge("e", "f", 2.0)
+        graph.addEdge("h", "end", 1.0)
+        graph.addEdge("d", "end", 5.0)
+
+        assertEquals(graph.dijkstra("start", "end"), listOf("start", "a", "e", "h", "end"))
+    }
 }
