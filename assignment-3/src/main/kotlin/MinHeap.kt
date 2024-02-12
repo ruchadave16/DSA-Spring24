@@ -21,7 +21,7 @@ data class MinHeapNode<T> (
  * @property indexMap: A lookup map to find existing vertices
  */
 class MinHeap<T> {
-    private var size: Int = 0
+    var size: Int = 0
     private var vertices: MutableList<MinHeapNode<T>> = mutableListOf()
     private var indexMap: MutableMap<T, Int> = mutableMapOf()
 
