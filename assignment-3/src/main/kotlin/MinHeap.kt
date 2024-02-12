@@ -81,12 +81,8 @@ class MinHeap<T> {
         }
 
         vertices.addLast(MinHeapNode(data, heapNumber))
+        indexMap[data] = size
         size += 1
-
-        // If first value, then set to index 0
-        if (size == 1) {
-            indexMap[data] = 0
-        }
 
         var i: Int = size - 1
         while (i >= 1) {
@@ -109,14 +105,16 @@ class MinHeap<T> {
             return null
         }
         if (size == 1) {
+            val temp: MinHeapNode<T> = vertices[0]
             size = 0
             vertices = mutableListOf()
             indexMap = mutableMapOf()
-            return vertices[0].data
+            return temp.data
         }
         else {
             val temp: MinHeapNode<T> = vertices[0]
-            swap(0, size-1)
+            size -= 1
+            swap(0, size)
             vertices.removeLast()
             indexMap.remove(temp.data)
             bubbleDown(0, vertices[0].priority)
@@ -166,7 +164,10 @@ class MinHeap<T> {
         val child2Priority: Double = if (child2Idx >= size) Double.POSITIVE_INFINITY else vertices[child2Idx].priority
 
         // Check both children for the one with the priority that this falls above
-        if ((child1Priority < priority) && (child2Priority < priority)) {
+        if (child1Priority == Double.POSITIVE_INFINITY && child2Priority == Double.POSITIVE_INFINITY) {
+            return
+        }
+        if ((child1Priority > priority) && (child2Priority > priority)) {
             return
         } else if (child1Priority < child2Priority) {
             swap(child1Idx, vertexIdx)

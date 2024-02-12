@@ -7,7 +7,7 @@ package org.dsa.assignment3
  * @param T: a representation of the items in the queue
  */
 class PriorityQueue <T> : MinPriorityQueue <T> {
-    private var queue: MinHeap<T> = MinHeap<T>()
+    var queue: MinHeap<T> = MinHeap<T>()
     override fun isEmpty(): Boolean {
         return (queue.size == 0)
     }
