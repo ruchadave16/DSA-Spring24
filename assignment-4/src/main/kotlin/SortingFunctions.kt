@@ -125,8 +125,9 @@ fun bubbleSort(list: MutableList<Int>) {
     for (i in 0..<list.size) {
         var swapped: Boolean = false
         // Since last i elements are already in place, traverse the entire array up till i
-        for (j in i..<list.size - i) {
-
+        for (j in 0..<list.size - i - 1) {
+            println(list[j])
+            println(list[j+1])
             // If the adjacent value is smaller, swap them
             if (list[j] > list[j+1]) {
                 val currValue: Int = list[j]
@@ -135,7 +136,8 @@ fun bubbleSort(list: MutableList<Int>) {
                 swapped = true
             }
         }
-
+        println(swapped)
+        println(list)
         // If completed the entire pass but still have not swapped any elements, then they are in order
         if (!swapped) {
             break

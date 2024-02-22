@@ -43,16 +43,16 @@ class SortingFunctionsKtTest {
     fun mergeSort() {
         // Ensure singular value results same when sorted
         val list = mutableListOf(1)
-        insertSort(list)
+        mergeSort(list)
         assertEquals(list, mutableListOf(1))
 
         // Ensure that longer lists are sorted correctly
         val list2 = mutableListOf(1, 3, 2)
-        insertSort(list2)
+        mergeSort(list2)
         assertEquals(list2, mutableListOf(1, 2, 3))
 
         val list3 = mutableListOf(1, 3, 4, 3, 2)
-        insertSort(list3)
+        mergeSort(list3)
         assertEquals(list3, mutableListOf(1, 2, 3, 3, 4))
     }
 
@@ -60,16 +60,17 @@ class SortingFunctionsKtTest {
     fun bubbleSort() {
         // Ensure singular value results same when sorted
         val list = mutableListOf(1)
-        insertSort(list)
+        bubbleSort(list)
         assertEquals(list, mutableListOf(1))
 
         // Ensure that longer lists are sorted correctly
         val list2 = mutableListOf(1, 3, 2)
-        insertSort(list2)
+        bubbleSort(list2)
         assertEquals(list2, mutableListOf(1, 2, 3))
 
+        println("Final Test")
         val list3 = mutableListOf(4, 3, 4, 3, 2)
-        insertSort(list3)
+        bubbleSort(list3)
         assertEquals(list3, mutableListOf(2, 3, 3, 4, 4))
     }
 }
