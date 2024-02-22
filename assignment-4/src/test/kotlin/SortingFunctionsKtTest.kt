@@ -70,6 +70,6 @@ class SortingFunctionsKtTest {
 
         val list3 = mutableListOf(4, 3, 4, 3, 2)
         insertSort(list3)
-        assertEquals(list3, mutableListOf(2, 3, 3, 4, 4s))
+        assertEquals(list3, mutableListOf(2, 3, 3, 4, 4))
     }
 }
