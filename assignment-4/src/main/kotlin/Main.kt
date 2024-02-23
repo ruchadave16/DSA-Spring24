@@ -1,5 +1,6 @@
 package org.dsa.assignment4
 
+import java.util.*
 import kotlin.time.DurationUnit
 import kotlin.time.measureTime
 
@@ -7,16 +8,14 @@ import kotlin.time.measureTime
  * Used to benchmark the algorithms for sorting
  */
 
-
-// , 1000, 2500, 5000, 7500, 10000
 fun main() {
-    // initialize data array to hold time values
+    // initialize data array to hold time values: rows are algorithms, columns are list size
     val timeArray = Array(4) {Array(7) {0.0} }
     var timeArrayIdx = 0
 
-    for (i in intArrayOf(100, 500)) {
+    for (i in intArrayOf(100, 500, 1000, 2500, 5000, 7500, 10000)) {
         // initialize random list of that size
-        val randListOrig = (1..100).map {(0..100000).random()}
+        val randListOrig = (0..i).map { (0..100000).random() }
         val randListInsert = randListOrig.toMutableList()
         val randListSelection = randListOrig.toMutableList()
         val randListMerge = randListOrig.toMutableList()
@@ -44,5 +43,6 @@ fun main() {
         timeArrayIdx += 1
     }
 
-    println(timeArray.contentToString())
+    // Printed array of time taken (Plot of a run is in folder)
+    println(timeArray.contentDeepToString())
 }

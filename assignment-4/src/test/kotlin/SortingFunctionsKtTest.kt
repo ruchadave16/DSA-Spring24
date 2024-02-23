@@ -68,7 +68,6 @@ class SortingFunctionsKtTest {
         bubbleSort(list2)
         assertEquals(list2, mutableListOf(1, 2, 3))
 
-        println("Final Test")
         val list3 = mutableListOf(4, 3, 4, 3, 2)
         bubbleSort(list3)
         assertEquals(list3, mutableListOf(2, 3, 3, 4, 4))
