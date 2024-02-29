@@ -1,7 +1,7 @@
 package org.dsa.assignment5
 
 /**
- *
+ * A class representing a square matrix using nested mutable lists.
  */
 class SquareMatrix () {
     private var matrix: MutableList<MutableList<Int>> = mutableListOf<MutableList<Int>>()
@@ -41,4 +41,59 @@ class SquareMatrix () {
     fun setValue(row: Int, col: Int, value: Int) {
         matrix[row][col] = value
     }
+
+    /**
+     * Return the size of the matrix
+     *
+     * @return: A Pair of ints representing the total rows and columns in the matrix respectively.
+     */
+     fun getSize(): Pair<Int, Int> {
+        return Pair(matrix.size, matrix[0].size)
+    }
+
+    /**
+     * Multiply this matrix by another matrix.
+     *
+     * This method uses traditional matrix multiplication to get the result.
+     *
+     * @param other: A SquareMatrix representing the matrix to multiply this matrix by
+     *
+     * @return: A matrix representing the result of this matrix multiplied by the inputted one and null if they are
+     * not compatible
+     */
+    fun multiply(other: SquareMatrix): SquareMatrix? {
+        if (getSize().second != other.getSize().first) {
+            return null
+        }
+
+        val result: SquareMatrix = SquareMatrix()
+        result.createMatrix(getSize().second) // Create empty matrix to store results
+
+        for (row1 in 0..<getSize().first) {
+            for (column2 in 0 ..<other.getSize().second) {
+                for (row2 in 0..<other.getSize().first) {
+                    val newValue: Int = result.getValue(row1, column2) + (getValue(row1, row2) + other.getValue(row2, column2))
+                    result.setValue(row1, column2, newValue)
+                }
+            }
+        }
+        return result
+    }
+
+    /**
+     * Multiply this matrix by another matrix using Strassen's Algorithm
+     *
+     * @param other: A SquareMatrix representing the matrix to multiply this matrix by
+     *
+     * @return: A matrix representing the result of this matrix multiplied by the inputted one and null if they are
+     * not compatible
+     */
+    fun strassenMultiply(other: SquareMatrix): SquareMatrix? {
+        if (getSize().second != other.getSize().first) {
+            return null
+        }
+
+        
+    }
+
 }
