@@ -47,7 +47,7 @@ class SquareMatrix (matrixIn: MutableList<MutableList<Int>> = mutableListOf()) {
      *
      * @return: A Pair of ints representing the total rows and columns in the matrix respectively.
      */
-     fun getSize(): Pair<Int, Int> {
+    fun getSize(): Pair<Int, Int> {
         return Pair(matrix.size, matrix[0].size)
     }
 
