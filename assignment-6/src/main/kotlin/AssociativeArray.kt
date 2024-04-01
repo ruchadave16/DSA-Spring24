@@ -1,5 +1,8 @@
 package org.dsa.assignment6
 
+import org.dsa.assignment2.DoubleLinkedList
+import org.dsa.assignment2.DoubleLinkedListNode
+
 /**
  * Represents a mapping of keys to values.
  * @param K the type of the keys
@@ -7,8 +10,14 @@ package org.dsa.assignment6
  */
 
 class AssociativeArray<K, V> {
-    var kList: MutableList<K> = mutableListOf()
-    var vList: MutableList<V> = mutableListOf()
+    private var size: Int = 0
+    var buckets: MutableList<DoubleLinkedList<Pair<K, V>>> = mutableListOf()
+
+    // Initialize buckets to an empty bucket
+    init {
+        size = 1
+        buckets[0] = DoubleLinkedList()
+    }
 
     /**
      * Add a mapping from the key [k] to the value [v]
@@ -19,14 +28,58 @@ class AssociativeArray<K, V> {
      * @param v: V type value to be added to map
      */
     operator fun set(k: K, v: V) {
-        if (contains(k)) {
-            val idx: Int = kList.indexOf(k)
-            vList[idx] = v
-        } else {
-            kList.add(k)
-            vList.add(v)
+        val hashKey: Int = k.hashCode() % size
+
+        // If load is high, rehash to next prime number (load factor is 0.75)
+        if ((size() / size) > 0.75) {
+            rehash()
         }
+
+        val thisBucket: DoubleLinkedList<Pair<K, V>> = buckets[hashKey]
+
+        // Loop through all keys in the particular bucket
+        var currNode = thisBucket.head
+        while (currNode != null) {
+            val thisKey = currNode.data.first
+            val thisValue = currNode.data.second
+
+            // If matching key already exists, replace data in that node
+            if (thisKey == k) {
+                currNode.data = Pair(k, v)
+                break
+            }
+            currNode = currNode.next
+        }
+
+        // If finish looping and there is no matching key, push new node to end of linked list
+        thisBucket.pushBack(Pair(k, v))
     }
+
+    /**
+     * Set the size of the hashmap to be double and move all the data to be rehashed
+     */
+    fun rehash() {
+        val newSize: Int = size * 2
+        val newBuckets: MutableList<DoubleLinkedList<Pair<K, V>>> = MutableList(newSize) {DoubleLinkedList()}
+
+        // Loop through each bucket and get every key's rehashed idx, change location to be there
+        for (idx in 0..<size) {
+            val thisBucket = buckets[idx]
+            if (!thisBucket.isEmpty()) {
+                var currNode = thisBucket.head
+                while (currNode != null) {
+                    val thisKey = currNode.data.first
+                    val thisValue = currNode.data.second
+                    val hashKey = thisKey.hashCode() % newSize // This is the new index of the key in the buckets
+                    newBuckets[hashKey].pushBack(Pair(thisKey, thisValue))
+                    currNode = currNode.next
+                }
+            }
+        }
+        buckets = newBuckets
+        size = newSize
+    }
+
 
     /**
      * @param k: K type key to check for in map
@@ -34,7 +87,22 @@ class AssociativeArray<K, V> {
      * @return true if [k] in map else false
      */
     operator fun contains(k: K): Boolean {
-        return kList.contains(k)
+        val hashKey: Int = k.hashCode() % size
+
+        // If hashKey empty, return false
+        if (buckets[hashKey].isEmpty()) {
+            return false
+        }
+
+        // Otherwise loop through and check each key to see if there is a match
+        var currNode = buckets[hashKey].head
+        while (currNode != null) {
+            if (currNode.data.first == k) {
+                return true
+            }
+            currNode = currNode.next
+        }
+        return false
     }
 
     /**
@@ -44,8 +112,15 @@ class AssociativeArray<K, V> {
      */
     operator fun get(k: K): V? {
         if (contains(k)) {
-            val idx: Int = kList.indexOf(k)
-            return vList[idx]
+            val hashKey: Int = k.hashCode() % size
+
+            var currNode = buckets[hashKey].head
+            while (currNode != null) {
+                if (currNode.data.first == k) {
+                    return currNode.data.second
+                }
+                currNode = currNode.next
+            }
         }
         return null
     }
@@ -59,10 +134,15 @@ class AssociativeArray<K, V> {
      */
     fun remove(k: K): Boolean {
         if (contains(k)) {
-            val idx: Int = kList.indexOf(k)
-            kList.removeAt(idx)
-            vList.removeAt(idx)
-            return true
+            val hashKey: Int = k.hashCode() % size
+
+            var currNode = buckets[hashKey].head
+            while (currNode != null) {
+                if (currNode.data.first == k) {
+                    return currNode.data.second
+                }
+                currNode = currNode.next
+            }
         }
         return false
     }
@@ -71,7 +151,19 @@ class AssociativeArray<K, V> {
      * @return an Int representing the size of the map (total keys)
      */
     fun size(): Int {
-        return kList.size
+        var finalSize: Int = 0
+
+        // Loop through each non-empty bucket and count total "keys"
+        for (idx in 0..<size) {
+            if (!buckets[idx].isEmpty()) {
+                var currNode = buckets[idx].head
+                while (currNode != null) {
+                    finalSize += 1
+                    currNode = currNode.next
+                }
+            }
+        }
+        return finalSize
     }
 
     /**
@@ -79,7 +171,7 @@ class AssociativeArray<K, V> {
      */
     fun keyValuePairs(): List<Pair<K, V>> {
         val pairList: MutableList<Pair<K, V>> = mutableListOf()
-        for (idx in 0..<size()) {
+        for (idx in 0..<size) {
             val thisPair = Pair(kList[idx], vList[idx])
             pairList.add(thisPair)
         }
