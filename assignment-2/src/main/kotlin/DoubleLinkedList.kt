@@ -2,7 +2,7 @@
  * Class for Double Linked List, including Double Linked List Node class definition
  */
 
-package com.dsa.assignment2
+package org.dsa.assignment2
 
 /**
  * A class representing a node in the double linked list

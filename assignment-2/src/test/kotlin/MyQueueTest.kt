@@ -1,4 +1,4 @@
-package com.dsa.assignment2
+package org.dsa.assignment2
 
 import org.junit.jupiter.api.Assertions.*
 import kotlin.test.Test

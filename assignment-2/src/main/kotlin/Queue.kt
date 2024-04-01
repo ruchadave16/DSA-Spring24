@@ -1,4 +1,4 @@
-package com.dsa.assignment2
+package org.dsa.assignment2
 
 interface Queue<T> {
     fun enqueue(data: T)

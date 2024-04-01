@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.dsa.assignment5.SquareMatrixTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2024-03-04T06:45:18" hostname="rdave-Precision-3551" time="0.044">
+  <properties/>
+  <testcase name="subtractMatrix()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.023"/>
+  <testcase name="strassenMultiply()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.002"/>
+  <testcase name="equalsMatrix()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.002"/>
+  <testcase name="subsection()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <testcase name="getSize()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <testcase name="multiply()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <testcase name="setValue()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <testcase name="createEmptyMatrix()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <testcase name="getValue()" classname="org.dsa.assignment5.SquareMatrixTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

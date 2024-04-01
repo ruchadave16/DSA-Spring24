@@ -1,4 +1,4 @@
-package org.assignment1
+package org.dsa.assignment1
 
 /*
  * Helper functions for Huffman Encoding

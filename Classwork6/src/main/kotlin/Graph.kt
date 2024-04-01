@@ -1,6 +1,6 @@
-package com.dsa.classwork6
+package org.dsa.classwork6
 
-import com.dsa.assignment2.MyQueue
+import org.dsa.assignment2.MyQueue
 
 class Graph<VertexType> {
     private var vertices: MutableSet<VertexType> = mutableSetOf()

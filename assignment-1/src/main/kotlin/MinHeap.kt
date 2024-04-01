@@ -1,4 +1,4 @@
-package org.assignment1
+package org.dsa.assignment1
 
 /**
  * Library containing necessary classes and functions to create a MinHeap

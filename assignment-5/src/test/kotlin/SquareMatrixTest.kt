@@ -133,7 +133,6 @@ class SquareMatrixTest {
         matrix3.createEmptyMatrix(4)
 
         val answer: SquareMatrix = SquareMatrix(mutableListOf(mutableListOf(23, -5), mutableListOf(7, 0)))
-
         // Check that multiplying 2 of different size returns null
         assertTrue(matrix.multiply(matrix3) == null)
         assertTrue(matrix3.multiply(matrix2) == null)

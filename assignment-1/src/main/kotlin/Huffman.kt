@@ -1,6 +1,6 @@
 // This project is taken from Rucha and Anmol's Fall 23 Discrete Project and redone in Kotlin to learn basic syntax
 
-package org.assignment1
+package org.dsa.assignment1
 
 fun main() {
     val map = mapFrequency("aabbbbcccccdddd")
