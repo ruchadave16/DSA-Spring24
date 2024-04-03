@@ -1,6 +1,7 @@
 package org.dsa.assignment6
 
 import org.dsa.assignment2.DoubleLinkedList
+import kotlin.math.abs
 
 /**
  * Represents a mapping of keys to values.
@@ -26,7 +27,7 @@ class AssociativeArray<K, V> {
      * @param v: V type value to be added to map
      */
     operator fun set(k: K, v: V) {
-        val hashKey: Int = k.hashCode() % size
+        val hashKey: Int = abs(k.hashCode()) % size
 
         // If load is high, rehash to next prime number (load factor is 0.75)
         if ((size() / size) > 0.75) {
@@ -71,7 +72,7 @@ class AssociativeArray<K, V> {
                 while (currNode != null) {
                     val thisKey = currNode.data.first
                     val thisValue = currNode.data.second
-                    val hashKey = thisKey.hashCode() % newSize // This is the new index of the key in the buckets
+                    val hashKey = abs(thisKey.hashCode()) % newSize // This is the new index of the key in the buckets
                     newBuckets[hashKey].pushBack(Pair(thisKey, thisValue))
                     currNode = currNode.next
                 }
@@ -88,7 +89,7 @@ class AssociativeArray<K, V> {
      * @return true if [k] in map else false
      */
     operator fun contains(k: K): Boolean {
-        val hashKey: Int = k.hashCode() % size
+        val hashKey: Int = abs(k.hashCode()) % size
 
         // If hashKey empty, return false
         if (buckets[hashKey].isEmpty()) {
@@ -113,7 +114,7 @@ class AssociativeArray<K, V> {
      */
     operator fun get(k: K): V? {
         if (contains(k)) {
-            val hashKey: Int = k.hashCode() % size
+            val hashKey: Int = abs(k.hashCode()) % size
 
             var currNode = buckets[hashKey].head
             while (currNode != null) {
@@ -135,7 +136,7 @@ class AssociativeArray<K, V> {
      */
     fun remove(k: K): Boolean {
         if (contains(k)) {
-            val hashKey: Int = k.hashCode() % size
+            val hashKey: Int = abs(k.hashCode()) % size
 
             var currNode = buckets[hashKey].head
             var prevNode = currNode?.prev
